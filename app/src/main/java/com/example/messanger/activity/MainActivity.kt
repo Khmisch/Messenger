@@ -2,64 +2,45 @@ package com.example.messanger.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.messanger.R
 import com.example.messanger.adapter.ChatAdapter
+import com.example.messanger.fragment.ChatFragment
+import com.example.messanger.fragment.PeopleFragment
 import com.example.messanger.model.Chat
 import com.example.messanger.model.Message
 import com.example.messanger.model.Room
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
-    lateinit var recyclerView:RecyclerView
+    private lateinit var bottomNavigationView: BottomNavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-            initViews()
-    }
+        val chatFragment= ChatFragment()
+        val contactsFragment= PeopleFragment()
+        bottomNavigationView = findViewById(R.id.bottomNavigationView)
 
-    private fun initViews() {
-       recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.setLayoutManager(GridLayoutManager(this, 1))
-        refreshAdapter(getAllChats())
-    }
+        setCurrentFragment(chatFragment)
 
-    private fun refreshAdapter(chats: ArrayList<Chat>) {
-        val adapter = ChatAdapter(this, chats)
-        recyclerView!!.adapter = adapter
-    }
-
-    private fun getAllChats(): ArrayList<Chat> {
-        val stories:ArrayList<Room> = ArrayList<Room>()
-
-        for (i in 1..15) {
-            if (i == 1|| i == 6 || i == 10 ) {
-                stories.add(Room(R.drawable.im_sample_007, "Khurshidbek"))
-            }else if (i == 2 || i == 7|| i == 11) {
-                stories.add(Room(R.drawable.im_sample_007, "Sherzodbek"))
-            } else if (i == 4 || i == 8|| i == 13) {
-                stories.add(Room(R.drawable.im_sample_007, "Begzodbek"))
-            } else {
-                stories.add(Room(R.drawable.im_sample_007,  "Xurshidbek"))
+        bottomNavigationView.setOnNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.menu_chats->setCurrentFragment(chatFragment)
+                R.id.menu_contacts->setCurrentFragment(contactsFragment)
             }
+            true
         }
-        val chats:ArrayList<Chat> = ArrayList<Chat>()
-        chats.add(Chat(stories))
-        for (i in 1..15) {
-            if (i == 1|| i == 6 || i == 10 ) {
-                chats.add(Chat(Message(R.drawable.im_sample_007, "Khurshidbek", true)))
-            }else if (i == 2 || i == 7|| i == 11) {
-                chats.add(Chat(Message(R.drawable.im_sample_007, "Sherzodbek",false )))
-            } else if (i == 4 || i == 8|| i == 13) {
-                chats.add(Chat(Message(R.drawable.im_sample_007, "Begzodbek",false )))
-            } else {
-                chats.add(Chat(Message(R.drawable.im_sample_007,  "Xurshidbek",true)))
-            }
-        }
-        return chats
 
     }
 
+    private fun setCurrentFragment(fragment: Fragment)=
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.flFragment,fragment)
+            commit()
+        }
 
 }

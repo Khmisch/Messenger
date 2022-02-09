@@ -6,15 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.messanger.R
+import com.example.messanger.fragment.ChatFragment
 import com.example.messanger.model.Chat
 import com.example.messanger.model.Room
 import com.google.android.material.imageview.ShapeableImageView
+import java.security.AccessController.getContext
 import java.util.ArrayList
 
-class ChatAdapter  (var context: Context, var items: ArrayList<Chat>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class ChatAdapter  (var context: ChatFragment, var items: ArrayList<Chat>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     private val TYPE_ITEM_ROOM = 0
     private val TYPE_ITEM_MESSAGE = 1
@@ -72,12 +75,12 @@ class ChatAdapter  (var context: Context, var items: ArrayList<Chat>): RecyclerV
 
     }
 
-    class RoomViewHolder(context: Context,view: View) : RecyclerView.ViewHolder(view) {
+    class RoomViewHolder(context: ChatFragment,view: View) : RecyclerView.ViewHolder(view) {
         var recyclerView:RecyclerView
 
        init {
            recyclerView= view.findViewById(R.id.recyclerView)
-           val manager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false)
+           val manager = LinearLayoutManager(context.activity,(LinearLayoutManager.HORIZONTAL), false)
            recyclerView.setLayoutManager(manager)
        }
 
